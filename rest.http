@@ -1,0 +1,26 @@
+@HOST = http://192.168.1.103:3333
+@USER_ENDPOINT = /api/v1/user
+
+### testing
+GET {{HOST}}{{USER_ENDPOINT}}/test  HTTP/1.1
+api_key: {{$dotenv API_KEY}}
+
+### lazyloadbabynames
+GET {{HOST}}{{USER_ENDPOINT}}/getbabynamesbyloading?skip=0  HTTP/1.1
+api_key: {{$dotenv API_KEY}}
+
+### religionsbydata
+GET {{HOST}}{{USER_ENDPOINT}}/getreligionsbydata  HTTP/1.1
+api_key: {{$dotenv API_KEY}}
+
+### getrashi
+GET {{HOST}}{{USER_ENDPOINT}}/getrashis  HTTP/1.1
+api_key: {{$dotenv API_KEY}}
+
+### getnakshatra
+GET {{HOST}}{{USER_ENDPOINT}}/getnakshatras  HTTP/1.1
+api_key: {{$dotenv API_KEY}}
+
+### getgenderbydata
+GET {{HOST}}{{USER_ENDPOINT}}/getgendebydata  HTTP/1.1
+api_key: {{$dotenv API_KEY}}

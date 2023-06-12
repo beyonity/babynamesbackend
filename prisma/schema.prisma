@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BabyNames {
+  id              Int        @id @default(autoincrement())
+  link            String?
+  english         String
+  meaning         String
+  gender          String
+  otherLanguage   Json?
+  isTop100        Boolean    @default(false)
+  easyToPronounce Boolean    @default(false)
+  modernName      Boolean    @default(false)
+  shortandSweet   Boolean    @default(false)
+  religionid      Int?
+  rashiid         Int?
+  naksathraid     Int?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime
+  numerology      String
+  Naksathra       Naksathra? @relation(fields: [naksathraid], references: [id])
+  Rashi           Rashi?     @relation(fields: [rashiid], references: [id])
+  Religion        Religion?  @relation(fields: [religionid], references: [id])
+
+  @@index([english])
+  @@index([gender])
+  @@index([meaning])
+}
+
+model Naksathra {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  letters   String
+  image     String      @default("None")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  babyNames BabyNames[]
+}
+
+model Rashi {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  letters   String
+  image     String      @default("None")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  babyNames BabyNames[]
+}
+
+model Religion {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  image     String      @default("None")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  babyNames BabyNames[]
+}
