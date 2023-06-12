@@ -58,7 +58,89 @@ exports.getgenderbydata = async (req, res) => {
 
 exports.getBabyNamesByLoading = async (req, res) => {
     try {
-        const { skip, alphabet, gender } = req.query;
+        const { skip, alphabet, gender,selected_menu,selectedid } = req.query;
+        console.log(req.query)
+        let where = {}
+        if(selected_menu !== "HOME"){
+            if(selected_menu === "RELIGION"){
+                where = {
+                    AND: [
+                        {
+                            english: {
+                                startsWith: alphabet,
+                            },
+                        },
+                        {
+                            gender: {
+                                in: gender
+                            },
+                        },
+                        {
+                            religionid:parseInt(selectedid)
+                        }
+                    ]
+                    
+                }
+            }else if(selected_menu === "RASHI"){
+                where = {
+                    AND: [
+                        {
+                            english: {
+                                startsWith: alphabet,
+                            },
+                        },
+                        {
+                            gender: {
+                                in: gender
+                            },
+                        },
+                        {
+                            rashiid:parseInt(selectedid)
+                        }
+                    ]
+                    
+                }
+            }else if(selected_menu === "NAKSHATRA"){
+                where = {
+                    AND: [
+                        {
+                            english: {
+                                startsWith: alphabet,
+                            },
+                        },
+                        {
+                            gender: {
+                                in: gender
+                            },
+                        },
+                        {
+                            nakshatraid:parseInt(selectedid)
+                        }
+                    ]
+                    
+                   
+                }
+            }       
+
+        }else {
+            where = {
+                AND: [
+                    {
+                        english: {
+                            startsWith: alphabet,
+                        },
+                    },
+                    {
+                        gender: {
+                            in: gender
+                        },
+                    }
+                    
+                ]
+                
+               
+            }
+        }
         //const {re,ra,na} = await this.getTables(religion,rashi,nakshatra);
         /*const where = {
             english: {
@@ -79,25 +161,12 @@ exports.getBabyNamesByLoading = async (req, res) => {
             
         }*/
 
+        console.log(where)
+
         const names = await prisma.BabyNames.findMany({
             skip: parseInt(skip),
-            take: 30,
-            where: {
-                AND: [
-                    {
-                        english: {
-                            startsWith: alphabet,
-                        },
-                    },
-                    {
-                        gender: {
-                            in: gender
-                        },
-                    }
-                ]
-
-            },
-
+            take: 20,
+            where,
             orderBy: {
                 english: 'asc',
             },
