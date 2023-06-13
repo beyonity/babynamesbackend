@@ -27,7 +27,7 @@ exports.getReligionsByData = async (req, res) => {
             select: {
                 id: true,
                 name: true,
-                image:true
+                image: true
             },
             orderBy: {
                 name: 'asc',
@@ -45,10 +45,10 @@ exports.getReligionsByData = async (req, res) => {
 exports.getgenderbydata = async (req, res) => {
     try {
         const gendersdata = await prisma.BabyNames.groupBy({
-            by:['gender']
+            by: ['gender']
         });
         console.log(gendersdata)
-        Result(200,false,"data",gendersdata,res)
+        Result(200, false, "data", gendersdata, res)
     } catch (err) {
         console.log(err)
         Result(500, true, err.message, [], res)
@@ -58,11 +58,11 @@ exports.getgenderbydata = async (req, res) => {
 
 exports.getBabyNamesByLoading = async (req, res) => {
     try {
-        const { skip, alphabet, gender,selected_menu,selectedid } = req.query;
+        const { skip, alphabet, gender, selected_menu, selectedid } = req.query;
         console.log(req.query)
         let where = {}
-        if(selected_menu !== "HOME"){
-            if(selected_menu === "RELIGION"){
+        if (selected_menu !== "HOME") {
+            if (selected_menu === "RELIGION") {
                 where = {
                     AND: [
                         {
@@ -76,53 +76,53 @@ exports.getBabyNamesByLoading = async (req, res) => {
                             },
                         },
                         {
-                            religionid:parseInt(selectedid)
+                            religionid: parseInt(selectedid)
                         }
                     ]
-                    
-                }
-            }else if(selected_menu === "RASHI"){
-                where = {
-                    AND: [
-                        {
-                            english: {
-                                startsWith: alphabet,
-                            },
-                        },
-                        {
-                            gender: {
-                                in: gender
-                            },
-                        },
-                        {
-                            rashiid:parseInt(selectedid)
-                        }
-                    ]
-                    
-                }
-            }else if(selected_menu === "NAKSHATRA"){
-                where = {
-                    AND: [
-                        {
-                            english: {
-                                startsWith: alphabet,
-                            },
-                        },
-                        {
-                            gender: {
-                                in: gender
-                            },
-                        },
-                        {
-                            nakshatraid:parseInt(selectedid)
-                        }
-                    ]
-                    
-                   
-                }
-            }       
 
-        }else {
+                }
+            } else if (selected_menu === "RASHI") {
+                where = {
+                    AND: [
+                        {
+                            english: {
+                                startsWith: alphabet,
+                            },
+                        },
+                        {
+                            gender: {
+                                in: gender
+                            },
+                        },
+                        {
+                            rashiid: parseInt(selectedid)
+                        }
+                    ]
+
+                }
+            } else if (selected_menu === "NAKSHATRA") {
+                where = {
+                    AND: [
+                        {
+                            english: {
+                                startsWith: alphabet,
+                            },
+                        },
+                        {
+                            gender: {
+                                in: gender
+                            },
+                        },
+                        {
+                            naksathraid: parseInt(selectedid)
+                        }
+                    ]
+
+
+                }
+            }
+
+        } else {
             where = {
                 AND: [
                     {
@@ -135,10 +135,10 @@ exports.getBabyNamesByLoading = async (req, res) => {
                             in: gender
                         },
                     }
-                    
+
                 ]
-                
-               
+
+
             }
         }
         //const {re,ra,na} = await this.getTables(religion,rashi,nakshatra);
@@ -167,10 +167,56 @@ exports.getBabyNamesByLoading = async (req, res) => {
             skip: parseInt(skip),
             take: 20,
             where,
+            include: {
+                religion: true,
+                naksathra: true,
+                rashi: true
+            },
             orderBy: {
                 english: 'asc',
             },
         });
+        console.log(names.length)
+        Result(200, false, "names", names, res)
+    } catch (err) {
+        console.log(err)
+        Result(500, true, err.message, {}, res)
+
+    }
+
+}
+
+
+
+exports.getBabyNamesByIds = async (req, res) => {
+    try {
+        const { ids } = req.query;
+
+        let values = []
+        if (typeof (ids) === 'object') {
+            const i = ids.map((id) => parseInt(id))
+            values.push(...i)
+        } else {
+            values.push(parseInt(ids))
+        }
+
+        console.log(values)
+        const names = await prisma.BabyNames.findMany({
+            where: {
+                id: {
+                    in: values
+                }
+            },
+            include: {
+                religion: true,
+                naksathra: true,
+                rashi: true
+            },
+            orderBy: {
+                english: 'asc',
+            },
+        });
+        console.log(names.length)
         Result(200, false, "names", names, res)
     } catch (err) {
         console.log(err)
@@ -205,7 +251,7 @@ exports.getRashi = async (req, res) => {
                 id: true,
                 name: true,
                 letters: true,
-                image:true
+                image: true
             },
         });
         Result(200, false, "rashi", rashi, res)
@@ -225,7 +271,7 @@ exports.getNakshatra = async (req, res) => {
                 id: true,
                 name: true,
                 letters: true,
-                image:true
+                image: true
             },
         });
         Result(200, false, "nakshatra", nakshatra, res)
@@ -275,10 +321,21 @@ exports.getTables = async (rashifilter, nakshtrafilter, reglisionfilter) => {
         } catch (err) {
             reject(err)
         }
-
     })
+}
 
-
+exports.getappupdate = async (req, res) => {
+    try {
+        const appupdate = await prisma.AppUpdate.findUnique({
+            where: {
+                id: 1
+            }
+        })
+        Result(200, true, "", appupdate, res)
+    } catch (err) {
+        console.log(err)
+        Result(500, true, err.message, {}, res)
+    }
 }
 
 

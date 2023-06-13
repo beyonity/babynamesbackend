@@ -18,6 +18,12 @@ async function userRoutes(fastify, options) {
     fastify.get('/getgendebydata',{
         handler: UserController.getgenderbydata,
     })
+    fastify.get("/getbabynamesbyids",{
+        handler:UserController.getBabyNamesByIds
+    })
+    fastify.get("/getappupdate",{
+        handler:UserController.getappupdate
+    })
 }
 
 
