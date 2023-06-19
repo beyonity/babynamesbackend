@@ -15,6 +15,14 @@ if (process.env.NODE_ENV === 'development') {
 fastify.register(require('@fastify/static'), {
     root: path.join(__dirname, 'static/images'),
     prefix: '/images/', // optional: default '/'
+    decorateReply: false,
+  })
+
+
+  fastify.register(require('@fastify/static'), {
+    root: path.join(__dirname, 'static/android'),
+    prefix: '/android/', // optional: default '/'
+    decorateReply: false,
   })
   
 
