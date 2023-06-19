@@ -1,5 +1,13 @@
 const UserController = require('../../../controllers/UserController')
 async function userRoutes(fastify, options) {
+
+    fastify.addHook('onRequest', (request, reply,done) => {
+        if (request.headers.api_key !== process.env.API_KEY) {
+            return reply.code(401).send({ error: 'Unauthorized' })
+        }
+        done()
+    })
+
     fastify.get('/test', {
         handler: UserController.test,
     })

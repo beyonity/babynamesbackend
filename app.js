@@ -20,12 +20,7 @@ fastify.register(require('@fastify/static'), {
 
 
 
-fastify.addHook('onRequest', (request, reply,done) => {
-    if (request.headers.api_key !== process.env.API_KEY) {
-        return reply.code(401).send({ error: 'Unauthorized' })
-    }
-    done()
-})
+
 
 
 

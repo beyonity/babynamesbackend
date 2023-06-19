@@ -3,11 +3,9 @@
 
 ### testing
 GET {{HOST}}{{USER_ENDPOINT}}/test  HTTP/1.1
-api_key: {{$dotenv API_KEY}}
 
 ### lazyloadbabynames
 GET {{HOST}}{{USER_ENDPOINT}}/getbabynamesbyloading?skip=0  HTTP/1.1
-api_key: {{$dotenv API_KEY}}
 
 ### religionsbydata
 GET {{HOST}}{{USER_ENDPOINT}}/getreligionsbydata  HTTP/1.1
